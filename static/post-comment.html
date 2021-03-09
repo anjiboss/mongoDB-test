@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script
+      type="text/javascript"
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+    ></script>
+  </head>
+  <body>
+    <form id="comment-form" action="/api/comments/" method="post">
+      <input type="text" name="userName" id="user" /><br />
+      <input type="text" name="comment" id="comment" /><br />
+      <input type="submit" />
+    </form>
+
+    <button id="comments">
+      <h1>Show Comments</h1>
+    </button>
+    <div id="showComment"></div>
+  </body>
+  <script>
+    const commentBtn = document.getElementById("comments");
+    const showCommentBtn = document.getElementById("showComment");
+
+    const postCmt = async (url, data) => {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      return res;
+    };
+
+    $("#comment-form").submit((event) => {
+      event.preventDefault();
+      postCmt("/api/comments", {
+        userName: $("#user").val(),
+        comment: $("#comment").val(),
+      })
+        .then((res) => res.text())
+        .then((status) => {
+          if (status == "ok") {
+            $("#comment-form").append(
+              `<p id="status">Submitted Successfully</p>`
+            );
+            setTimeout(() => {
+              $("#status").fadeOut();
+            }, 3000);
+          }
+        });
+    });
+
+    commentBtn.addEventListener("click", () => {
+      fetch("/api/comments/")
+        .then((res) => res.json())
+        .then((data) => showComment(data));
+    });
+
+    const showComment = (comments) => {
+      $("#showComment").html("");
+      comments.forEach((comment) => {
+        $("#showComment").append(
+          `<div>User: ${comment.user}</div>
+           <div>Comment: ${comment.comment}</div>
+           `
+        );
+      });
+    };
+  </script>
+</html>

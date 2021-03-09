@@ -36,4 +36,8 @@ app.get("/", (req, res) => {
 app.use("/api/words/", wordsRoute);
 app.use("/api/comments/", commentRoute);
 
+app.get("/comments/", (req, res) => {
+  res.sendFile(path.join(__dirname, "static", "post-comment.html"));
+});
+
 app.listen(5000, () => console.log("listening on port 5000"));
