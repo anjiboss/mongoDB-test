@@ -9,6 +9,9 @@ const mongoose = require("mongoose");
 //MiddleWare
 app.use(express.static(path.join(__dirname, "static")));
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 //Import Route
 const wordsRoute = require("./routes/postWords");
 
@@ -27,9 +30,8 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "static", "index.html"));
 });
 
-app.use(express.json());
 //Route Middleware
 
-app.use("/api/words", wordsRoute);
+app.use("/api/words/", wordsRoute);
 
 app.listen(5000, () => console.log("listening on port 5000"));
