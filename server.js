@@ -14,6 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 
 //Import Route
 const wordsRoute = require("./routes/postWords");
+const commentRoute = require("./routes/comments");
 
 //DB
 mongoose.connect(process.env.DB_CONNECTION, {
@@ -33,5 +34,6 @@ app.get("/", (req, res) => {
 //Route Middleware
 
 app.use("/api/words/", wordsRoute);
+app.use("/api/comments/", commentRoute);
 
 app.listen(5000, () => console.log("listening on port 5000"));
