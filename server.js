@@ -6,12 +6,13 @@ require("dotenv").config();
 //CORS
 const cors = require("cors");
 
-app.use(cors());
+// app.use(cors());
 
 const mongoose = require("mongoose");
 
 //MiddleWare
 app.use(express.static(path.join(__dirname, "static")));
+// app.use(express.urlencoded());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -35,10 +36,17 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "static", "index.html"));
 });
 
+//CORS Options
+const corsOption = {
+  // *** ***************** the "/" is not allowed
+  origin: "http://127.0.0.1:5500",
+  optionSuccessStatus: 200,
+};
+
 //Route Middleware
 
 app.use("/api/words/", wordsRoute);
-app.use("/api/comments/", commentRoute);
+app.use("/api/comments/", cors(corsOption), commentRoute);
 
 app.get("/comments/", (req, res) => {
   res.sendFile(path.join(__dirname, "static", "post-comment.html"));
